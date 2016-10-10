@@ -21,6 +21,7 @@ function authorize(token) {
   });
 }
 
+// login and if success get Account data
 function login(credentials) {
   return new Promise(function(resolve, reject) {
     logger.debug("Login username: %s", credentials.username);

@@ -3,8 +3,10 @@ var router          = express.Router();
 var config          = require('../config/config.json');
 var authRoute       = require('./auth');
 var restaurantRoute = require('./restaurant');
-var jwt             = require('jsonwebtoken');
 var authCtrl        = require('../controllers/authorization.ctrl');
+
+//Resolve token against external api.
+// TODO: must go on app if token is not provided on startup?
 require('../services/service.srv').getToken();
 
 // Authorize a user consume private resources

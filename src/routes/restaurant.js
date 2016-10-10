@@ -5,6 +5,8 @@ var restaurantCtrl = require('../controllers/restaurant.ctrl');
 
 
 function findByPosition(req, res) {
+  // Verify body required parameters
+  // return http code 400 in case they missed
   if (!req.query.point) {
     res.status(400).send({code: 'fail', message: 'point parameter is required'});
   } else {

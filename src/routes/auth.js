@@ -2,6 +2,8 @@ var authCtrl = require('../controllers/authorization.ctrl.js');
 
 
 function login(req, res) {
+  // Verify body required parameters
+  // return http code 400 in case they missed
   if (!req.body.username || !req.body.password) {
     res.status(400).send({code: 'fail', message: 'username and password parameters are required'});
   } else {

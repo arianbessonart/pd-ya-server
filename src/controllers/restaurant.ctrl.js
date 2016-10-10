@@ -8,6 +8,7 @@ var pattern = new RegExp(/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?
 
 function findByPosition(point, options) {
   return new Promise(function(resolve, reject) {
+    // Verify point has coordinate format
     if (pattern.test(point)) {
       apiSrv.getRestaurants(point, options).then(function(restaurants) {
         // Order the dataset by ratingScore Desc
