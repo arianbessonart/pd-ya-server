@@ -1,0 +1,14 @@
+{
+  "clientKey": {
+    "clientId": "trivia_f",
+    "clientSecret": "PeY@@Tr1v1@943"
+  },
+  "apiUrl": {
+    "base": "http://stg-api.pedidosya.com",
+    "prefix": "/public/v1/"
+  },
+  "jwt": {
+    "secretKey": "super-top-secret-key-evaluation",
+    "headerTokenField": "Authorization"
+  }
+}
