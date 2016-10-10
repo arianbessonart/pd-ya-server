@@ -1,5 +1,7 @@
 
 [![Build Status](https://travis-ci.org/arianbessonart/pd-ya-server.svg?branch=master)](https://travis-ci.org/arianbessonart/pd-ya-server)
+[![Coverage Status](https://coveralls.io/repos/github/arianbessonart/pd-ya-server/badge.svg?branch=master)](https://coveralls.io/github/arianbessonart/pd-ya-server?branch=master)
+
 
 ## Pedidos Ya Backend evaluation
 
@@ -57,7 +59,14 @@ Use **istanbul** framework. You can use the next command for run test with cover
 ```
 
 ### Continuous Integration
-Add continuous integration using travis platform. On every push run test.
+Add continuous integration running test on every change. Add badge on top of README.
+
+#### travis-ci
+Plaform for running builds.
+
+#### coveralls
+Web service to track your code coverage.
+
 
 ### Order Restaurants by Rating
 Using **lodash** library for order a dataset of Restaurants by theirs rating.
