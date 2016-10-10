@@ -4,7 +4,7 @@
     "clientSecret": "top-secret"
   },
   "apiUrl": {
-    "base": "top-secret",
+    "base": "http://top-secret",
     "prefix": "/public/v1/"
   },
   "jwt": {

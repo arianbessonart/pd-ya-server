@@ -132,8 +132,6 @@ describe('external api services', function () {
   });
 
 
-  // should(response.access_token).eql({"id":12,"lastName":"Doe","name":"John","country":{"id":1}, "username":"johndoe@company.com", "token": "8113-4a45-b324-13fb"});
-
   it('login', function (done) {
     var username = "johndoe@company.com";
     var password = "complex-password";
