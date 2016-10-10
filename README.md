@@ -56,6 +56,9 @@ Use **istanbul** framework. You can use the next command for run test with cover
   npm run coverage
 ```
 
+### Continuous Integration
+Add continuous integration using travis platform. On every push run test.
+
 ### Order Restaurants by Rating
 Using **lodash** library for order a dataset of Restaurants by theirs rating.
 ```javascript
