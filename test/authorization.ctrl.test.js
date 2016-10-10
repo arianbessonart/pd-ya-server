@@ -21,7 +21,18 @@ var servicesStub = {
   }
 };
 
+var servicesFailStub = {
+  login: function (credentials) {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        reject({"messages":["security.invalidCredentials"],"code":"USR_INVALID_CREDENTIALS"});
+      }, 1);
+    });
+  }
+};
+
 var authCtrl = proxyquire('../src/controllers/authorization.ctrl.js', {'../services/service.srv.js': servicesStub});
+var authFailLoginCtrl = proxyquire('../src/controllers/authorization.ctrl.js', {'../services/service.srv.js': servicesFailStub});
 
 
 describe('authorization controller', function () {
@@ -44,6 +55,19 @@ describe('authorization controller', function () {
       should(user.lastName).eql("Doe");
       should(user.username).eql("johndoe@company.com");
       should(user.country).eql({"id":1});
+      done();
+    });
+  });
+
+  it('login fail', function (done) {
+    authFailLoginCtrl.login({username: "johndoe@company.com", password: "some-password"}).then(function (response) {
+      should.fail();
+      done();
+    }).catch(function (error) {
+      should(error).have.property("messages");
+      should(error).have.property("code");
+      should(error.messages).eql(["security.invalidCredentials"]);
+      should(error.code).eql("USR_INVALID_CREDENTIALS");
       done();
     });
   });
