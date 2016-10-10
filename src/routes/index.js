@@ -4,21 +4,20 @@ var config          = require('../config/config.json');
 var authRoute       = require('./auth');
 var restaurantRoute = require('./restaurant');
 var jwt             = require('jsonwebtoken');
+var authCtrl        = require('../controllers/authorization.ctrl');
 require('../services/service.srv').getToken();
 
 // Authorize a user consume private resources
 function authorize(req, res, next) {
   var token = req.body.token || req.query.token || req.headers[config.jwt.headerTokenField.toLowerCase()];
   if (token) {
-    // Verify token provided
-    jwt.verify(token, config.jwt.secretKey, function (err, payload) {
-      if (err) {
-        return res.status(403).send({ success: false, message: 'Failed to authenticate token.' });
-      }
+    authCtrl.authorize(token).then(function(user) {
       // Store the user object into request
       // so the specific route could use it
-      req.user = payload;
+      req.user = user;
       next();
+    }).catch(function (error) {
+      return res.status(403).send(error);
     });
   } else {
     return res.status(403).send({

@@ -2,7 +2,8 @@
 
 var should = require('should');
 var Promise  = require('bluebird');
-
+var jwt      = require('jsonwebtoken');
+var config = require('../src/config/config.json');
 var proxyquire =  require('proxyquire');
 
 
@@ -75,6 +76,31 @@ describe('authorization controller', function () {
   it('logout', function (done) {
     authCtrl.logout("johndoe@company.com").then(function (response) {
       should(response).not.be.ok;
+      done();
+    });
+  });
+
+  it('authorize', function (done) {
+    var payload = {id: 12, username: "johndoe@company.com"};
+    var token = jwt.sign(payload, config.jwt.secretKey);
+    authCtrl.authorize(token).then(function (response) {
+      should(response.id).eql(payload.id);
+      should(response.username).eql(payload.username);
+      done();
+    }).catch(function(error) {
+      should.fail();
+      done();
+    });
+  });
+
+  it('authorize fail', function (done) {
+    var payload = {id: 12, username: "johndoe@company.com"};
+    var token = jwt.sign(payload, config.jwt.secretKey);
+    authCtrl.authorize(token+"addletterstofail").then(function (response) {
+      should.fail();
+      done();
+    }).catch(function(error) {
+      should(error).eql({success: false, message: 'Failed to authenticate token.'});
       done();
     });
   });

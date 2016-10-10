@@ -8,6 +8,19 @@ var logger   = require('../lib/log').getLogger();
 var apiSrv = require('../services/service.srv.js');
 
 
+// Authorize a user consume private resources
+function authorize(token) {
+  return new Promise(function (resolve, reject) {
+    // Verify token provided
+    jwt.verify(token, config.jwt.secretKey, function (err, payload) {
+      if (err) {
+        reject({success: false, message: 'Failed to authenticate token.'});
+      }
+      resolve(payload);
+    });
+  });
+}
+
 function login(credentials) {
   return new Promise(function(resolve, reject) {
     logger.debug("Login username: %s", credentials.username);
@@ -36,6 +49,7 @@ function logout(username) {
 
 
 module.exports = {
+  authorize: authorize,
   login: login,
   logout: logout
 }

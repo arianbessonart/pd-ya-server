@@ -1,19 +1,21 @@
-var _ = require('lodash');
-
 var express = require('express');
 var router = express.Router();
 
-var apiSrv = require('../services/service.srv.js');
+var restaurantCtrl = require('../controllers/restaurant.ctrl');
 
 
 function findByPosition(req, res) {
-  var options = { offset: req.query.offset, limit: req.query.limit};
-  apiSrv.getRestaurants(req.query.point, options).then(function(restaurants) {
-    // Order the dataset by ratingScore Desc
-    // TODO: Request the team to add sort parameter
-    restaurants.data = _.orderBy(restaurants.data, ['ratingScore'], ['desc']);
-    res.status(200).send(restaurants);
-  });
+  if (!req.query.point) {
+    res.status(400).send({code: 'fail', message: 'point parameter is required'});
+  } else {
+    var options = { offset: req.query.offset, limit: req.query.limit};
+    restaurantCtrl.findByPosition(req.query.point, options).then(function(restaurants) {
+      res.status(200).send(restaurants);
+    }).catch(function (error) {
+      var code = error.code || 500;
+      res.status(code).send({success: false, message: error.message});
+    });
+  }
 };
 
 
