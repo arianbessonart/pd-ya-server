@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/arianbessonart/pd-ya-server.svg?branch=master)](https://travis-ci.org/arianbessonart/pd-ya-server)
+
 ## Pedidos Ya Backend evaluation
 
 ## Run
