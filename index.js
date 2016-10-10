@@ -5,8 +5,6 @@ var logger = require('./src/lib/log').init('debug');
 var api        = require('./src/routes');
 app            = express();
 
-require('./src/services/service.srv').init();
-
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));

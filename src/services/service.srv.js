@@ -9,13 +9,8 @@ var baseUrl = config.apiUrl.base+config.apiUrl.prefix;
 
 var limitDefault  = 20;
 var offsetDefault = 0;
+var retryDefault = 1;
 
-
-// TODO: Retry in case communication problems
-function init() {
-  getToken().then(function(response) {
-  });
-}
 
 function getToken() {
   return new Promise(function (resolve, reject) {
@@ -60,6 +55,10 @@ function getAccount(uToken) {
 function getRestaurants(point, options) {
   var limit = options.limit || limitDefault;
   var offset = options.offset || offsetDefault;
+  var retry = retryDefault;
+  if (options.retry !== undefined && options.retry !== null) {
+    retry = options.retry;
+  }
   var url = baseUrl + "search/restaurants?point="+point+"&max="+limit+"&offset="+offset;
   return new Promise(function (resolve, reject) {
     rp(
@@ -73,13 +72,15 @@ function getRestaurants(point, options) {
       logger.debug(response);
       resolve(response);
     }).catch(function (error) {
-      if (error.error && error.error.code === 'INVALID_TOKEN') {
-        logger.error(error);
+      if (error.error && error.error.code === 'INVALID_TOKEN' && retry > 0) {
         getToken().then(function() {
+          options.retry = retry - 1;
           return getRestaurants(point, options);
         }).catch(function (error) {
           reject(error);
         });
+      } else {
+        reject(error);
       }
     });
   });
@@ -87,7 +88,6 @@ function getRestaurants(point, options) {
 
 
 module.exports = {
-  init: init,
   getToken: getToken,
   login: login,
   getAccount: getAccount,

@@ -130,6 +130,22 @@ describe('external api services', function () {
     });
   });
 
+  it('get token failing credentials', function (done) {
+    nock(config.apiUrl.base).get(config.apiUrl.prefix+'tokens')
+      .query({clientId: config.clientKey.clientId, clientSecret: config.clientKey.clientSecret})
+      .reply(401, {"messages":["security.invalidCredentials"],"code":"INVALID_TOKEN"});
+    apiSrv.getToken().then(function (response) {
+      should.fail();
+      done();
+    }).catch(function (error) {
+      should(error).have.property("statusCode");
+      should(error.statusCode).eql(401);
+      should(error).have.property("error");
+      should(error.error).eql({"messages":["security.invalidCredentials"],"code":"INVALID_TOKEN"});
+      done();
+    });
+  });
+
 
   it('login', function (done) {
     var username = "johndoe@company.com";
@@ -167,8 +183,28 @@ describe('external api services', function () {
       .get(config.apiUrl.prefix+'search/restaurants')
       .query({point: point, max: maxValue, offset: offsetValue})
       .reply(200, responseMock);
-    apiSrv.getRestaurants(point, {limit: maxValue, offset: offsetValue}).then(function (response) {
+    apiSrv.getRestaurants(point, {limit: maxValue, offset: offsetValue, retry: 2}).then(function (response) {
       should(response).eql(responseMock);
+      done();
+    });
+  });
+
+  it('getRestaurants with fail token', function (done) {
+    var token = "8113-4a45-b324-13fb";
+    var maxValue = 1;
+    var offsetValue = 0;
+    var point = "-34.9200968,-56.1508075";
+    nock(config.apiUrl.base).get(config.apiUrl.prefix+'tokens')
+      .query({clientId: config.clientKey.clientId, clientSecret: config.clientKey.clientSecret})
+      .reply(200, { access_token: "7125-4af6-b197-94ba45cef185"});
+    nock(config.apiUrl.base)
+      .get(config.apiUrl.prefix+'search/restaurants')
+      .query({point: point, max: maxValue, offset: offsetValue})
+      .reply(403, {"messages":["security.forbidden"],"code":"INVALID_TOKEN"});
+    apiSrv.getRestaurants(point, {limit: maxValue, offset: offsetValue, retry: 1}).then(function (response) {
+      should.fail();
+      done();
+    }).catch(function (error) {
       done();
     });
   });

@@ -4,6 +4,7 @@ var config          = require('../config/config.json');
 var authRoute       = require('./auth');
 var restaurantRoute = require('./restaurant');
 var jwt             = require('jsonwebtoken');
+require('../services/service.srv').getToken();
 
 // Authorize a user consume private resources
 function authorize(req, res, next) {
