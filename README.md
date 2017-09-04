@@ -68,8 +68,8 @@ Plaform for running builds.
 Web service to track your code coverage.
 
 
-### Order Restaurants by Rating
-Using **lodash** library for order a dataset of Restaurants by theirs rating.
+### Sort Restaurants by Rating
+Using **lodash** library for sort a dataset of Restaurants by theirs rating.
 ```javascript
   restaurants = _.orderBy(restaurants, ['ratingScore'], ['desc']);
 ```
